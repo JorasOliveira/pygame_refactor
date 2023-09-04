@@ -1,0 +1,5 @@
+site_name: py_game
+site_url: https://jjpygame.com/
+nav:
+  - Home: index.md
+  - About: about.md

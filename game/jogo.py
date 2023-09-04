@@ -19,7 +19,7 @@ BLUE = (0, 0, 255)
 class Background(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'fundo.PNG')
+        imagem = os.path.join('Imagem', 'fundo.png')
         print(imagem)
         try:  # Importanto a imagem
             BackGround = pygame.image.load(imagem)  # da tela de fundo
