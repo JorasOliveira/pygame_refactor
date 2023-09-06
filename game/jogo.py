@@ -16,6 +16,17 @@ YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 
 
+def calcula_colisao_chao(sprite):
+    if sprite.rect.bottom > 672:  # com o chao
+        sprite.rect.bottom = 672
+        sprite.speedY = 0
+
+    if sprite.rect.x <= 0:
+        sprite.rect.x = 0
+
+    if sprite.rect.x >= 1336 - sprite.rect.width:
+        sprite.rect.x = 1336 - sprite.rect.width
+
 class Background(pygame.sprite.Sprite):
     def __init__(self):
 
@@ -341,16 +352,6 @@ def main():  # main routine
                 bola.speedY = -player2.speedY * (random.uniform(2, 4))
                 chute.play()
 
-    def calcula_colisao_chao(sprite):
-        if sprite.rect.bottom > 672:  # com o chao
-            sprite.rect.bottom = 672
-            sprite.speedY = 0
-
-        if sprite.rect.x <= 0:
-            sprite.rect.x = 0
-
-        if sprite.rect.x >= 1336 - sprite.rect.width:
-            sprite.rect.x = 1336 - sprite.rect.width
 
     def calcula_colisao_gol(gol_dir, gol_esq, bola):
         if pygame.sprite.collide_rect(bola, gol_dir):
