@@ -19,13 +19,10 @@ BLUE = (0, 0, 255)
 def calcula_colisao_chao(sprite):
     if sprite.rect.bottom > 672:  # com o chao
         sprite.rect.bottom = 672
-        sprite.speedY = 0
+        sprite.speed_y = 0
 
-    if sprite.rect.x <= 0:
-        sprite.rect.x = 0
-
-    if sprite.rect.x >= 1336 - sprite.rect.width:
-        sprite.rect.x = 1336 - sprite.rect.width
+    sprite.rect.x = max(0,sprite.rect.x)
+    sprite.rect.x = min(1336 - sprite.rect.width, sprite.rect.x)
 
 class Background(pygame.sprite.Sprite):
     def __init__(self):
@@ -33,14 +30,14 @@ class Background(pygame.sprite.Sprite):
         imagem = os.path.join('Imagem', 'fundo.png')
         print(imagem)
         try:  # Importanto a imagem
-            BackGround = pygame.image.load(imagem)  # da tela de fundo
+            back_ground = pygame.image.load(imagem)  # da tela de fundo
         except pygame.error:
             print("Erro ao carregar imagem de fundo")
             sys.exit()
 
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = BackGround
+        self.image = back_ground
 
 
 class Startscreen(pygame.sprite.Sprite):
@@ -49,14 +46,14 @@ class Startscreen(pygame.sprite.Sprite):
         imagem = os.path.join('Imagem', 'startscreen.png')
         print(imagem)
         try:  # Importanto a imagem
-            StartScreen = pygame.image.load(imagem)  # da Tela Inicial
+            start_screen = pygame.image.load(imagem)  # da Tela Inicial
         except pygame.error:
             print("Erro ao carregar imagem inicial")
             sys.exit()
 
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = StartScreen
+        self.image = start_screen
 
 
 class Jogador1(pygame.sprite.Sprite):
@@ -79,12 +76,12 @@ class Jogador1(pygame.sprite.Sprite):
         self.rect.bottom = row
         self.mask = pygame.mask.from_surface(self.image)
         self.score = 0
-        self.speedX = 0
-        self.speedY = 0
+        self.speed_x = 0
+        self.speed_y = 0
 
     def update(self):
-        self.rect.x += self.speedX
-        self.rect.y += self.speedY
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
 
 
 class Jogador2(pygame.sprite.Sprite):
@@ -108,12 +105,12 @@ class Jogador2(pygame.sprite.Sprite):
         self.rect.bottom = row
         self.mask = pygame.mask.from_surface(self.image)
         self.score = 0
-        self.speedX = 0
-        self.speedY = 0
+        self.speed_x = 0
+        self.speed_y = 0
 
     def update(self):
-        self.rect.x += self.speedX
-        self.rect.y += self.speedY
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
 
 
 class Bola(pygame.sprite.Sprite):
@@ -135,12 +132,12 @@ class Bola(pygame.sprite.Sprite):
         self.rect.x = colum
         self.rect.bottom = row
         self.mask = pygame.mask.from_surface(self.image)
-        self.speedX = 0
-        self.speedY = 0
+        self.speed_x = 0
+        self.speed_y = 0
 
     def update(self):
-        self.rect.x += self.speedX
-        self.rect.y += self.speedY
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
 
 
 class Campo(pygame.sprite.Sprite):
@@ -203,63 +200,62 @@ class GolDireito(pygame.sprite.Sprite):
         self.rect.bottom = 672
 
 
-class Endscreen(pygame.sprite.Sprite):
+class End_screen(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'endscreen.png')
+        imagem = os.path.join('Imagem', 'end_screen.png')
         print(imagem)
         try:  # Importanto a imagem
-            EndScreen = pygame.image.load(imagem)  # da endscreen
+            End_screen = pygame.image.load(imagem)  # da end_screen
         except pygame.error:
             print("Erro ao carregar imagem final")
             sys.exit()
 
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = EndScreen
+        self.image = End_screen
 
 
 def main():  # main routine
     pygame.init()
 
     # dimensoes do display, em X e Y
-    DISPLAY_X = 1336
-    DISPLAY_Y = 752
+    display_x = 1336
+    display_y = 752
 
-    surf = pygame.display.set_mode([DISPLAY_X, DISPLAY_Y])  # cria o display
+    surf = pygame.display.set_mode([display_x, display_y])  # cria o display
 
-    backGround = Background()
+    back_ground = Background()
 
-    startScreen = Startscreen()
+    start_screen = Startscreen()
 
-    endScreen = Endscreen()
+    end_screen = End_screen()
 
     # Criando o booleano para configurar a tela inicial:
     start = True
 
     pygame.display.update()
 
-    fontScore = pygame.font.Font(pygame.font.get_default_font(), 35)
-    fontInstructions = pygame.font.Font(pygame.font.get_default_font(), 20)
+    font_score = pygame.font.Font(pygame.font.get_default_font(), 35)
+    font_instructions = pygame.font.Font(pygame.font.get_default_font(), 20)
 
-    clock = pygame.time.Clock()
 
     # n tem contstante no python, mas letra maiuscula indica constante
-    POS_Y = int(DISPLAY_Y / 4)
-    POS_X = int(DISPLAY_X / 6)
-    DELTA_POS_X = 1.75
-    DELTA_POS_Y = 100
+    pos_y = int(display_y / 4)
+    pos_x = int(display_x / 6)
+    delta_pos_x = 1.75
+    delta_pos_y = 100
 
     # cria os objetos dos jogadores/suas sprites
-    p1 = Jogador1(POS_X, POS_Y, 'block')
-    p2 = Jogador2(1336 - 350, POS_Y, 'block')
-    jabulani = Bola(DISPLAY_X / 2, DISPLAY_X / 2, 'block')
+    p_1 = Jogador1(pos_x, pos_y, 'block')
+    p_2 = Jogador2(1336 - 350, pos_y, 'block')
+    jabulani = Bola(display_x / 2, display_x / 2, 'block')
     cancha = Campo()
     golEsq = GolEsquerdo()
     golDir = GolDireito()
 
     sprites = pygame.sprite.Group()  # criando o grupo de sprites
-    sprites.add(p1, p2, jabulani)  # adiciona as sprites ao grupo de sprites
+    sprites.add(p_1, p_2, jabulani)  # adiciona as sprites ao grupo de sprites
 
     # inicializa a musica de fundo
     torcida = os.path.join('Som', 'Torcida.ogg')  # Som ambiente de torcida
@@ -277,79 +273,81 @@ def main():  # main routine
     gol.set_volume(0.7)
 
     def reset():
-        jabulani.rect.x = DISPLAY_X / 2
-        jabulani.rect.y = DISPLAY_X / 2
-        jabulani.speedX = 0
-        jabulani.speedY = 0
+        jabulani.rect.x = display_x / 2
+        jabulani.rect.y = display_x / 2
+        jabulani.speed_x = 0
+        jabulani.speed_y = 0
 
-        p1.rect.x = POS_X
-        p1.rect.y = POS_Y
-        p1.speedX = 0
-        p1.speedY = 0
+        p_1.rect.x = pos_x
+        p_1.rect.y = pos_y
+        p_1.speed_x = 0
+        p_1.speed_y = 0
 
-        p2.rect.x = 1336 - 350
-        p2.rect.y = POS_Y
-        p2.speedX = 0
-        p2.speedY = 0
+        p_2.rect.x = 1336 - 350
+        p_2.rect.y = pos_y
+        p_2.speed_x = 0
+        p_2.speed_y = 0
 
     def move_player():
         # jogador 1, se move com W,A,D
         if event.key == pygame.K_a:  # a para esquerda
-            if p1.speedX >= 0.1:
-                p1.speedX = 0
-            p1.speedX -= DELTA_POS_X
-            p1.rect.x -= DELTA_POS_X
+            if p_1.speed_x >= 0.1:
+                p_1.speed_x = 0
+            p_1.speed_x -= delta_pos_x
+            p_1.rect.x -= delta_pos_x
 
         if event.key == pygame.K_d:  # d para direita
-            if p1.speedX <= -0.1:
-                p1.speedX = 0
-            p1.speedX += DELTA_POS_X
-            p1.rect.x += DELTA_POS_X
+            if p_1.speed_x <= -0.1:
+                p_1.speed_x = 0
+            p_1.speed_x += delta_pos_x
+            p_1.rect.x += delta_pos_x
 
         # jogador 2, se move com as setas
         if event.key == pygame.K_LEFT:  # seta da esquerda para esquerda
-            if p2.speedX >= 0.1:
-                p2.speedX = 0
-            p2.speedX -= DELTA_POS_X
-            p2.rect.x -= DELTA_POS_X
+            if p_2.speed_x >= 0.1:
+                p_2.speed_x = 0
+            p_2.speed_x -= delta_pos_x
+            p_2.rect.x -= delta_pos_x
 
         if event.key == pygame.K_RIGHT:  # seta da direita para direita
-            if p2.speedX <= -0.1:
-                p2.speedX = 0
-            p2.speedX += DELTA_POS_X
-            p2.rect.x += DELTA_POS_X
+            if p_2.speed_x <= -0.1:
+                p_2.speed_x = 0
+            p_2.speed_x += delta_pos_x
+            p_2.rect.x += delta_pos_x
 
         if event.key == pygame.K_w:  # w faz o jogador 1 pular
-            p1.rect.y -= DELTA_POS_Y
+            p_1.rect.y -= delta_pos_y
             pulo.play()
 
         if event.key == pygame.K_UP:  # seta para cima faz o jogador 2 pular
-            p2.rect.y -= DELTA_POS_Y
+            p_2.rect.y -= delta_pos_y
             pulo.play()
 
     def calcula_colisao_p_bola(player1, player2, bola):
-        if pygame.sprite.collide_mask(player1, bola):  # player 1 com  a bola, garantido que ele soh possa
-            # chutar para o gol do p2
-            if player1.speedX >= 0:
-                bola.speedX = player1.speedX * (random.uniform(1, 3))
-                bola.speedY = (-1) * random.randint(12, 18) + player1.speedY * (random.uniform(0.1, 0.7))
+        if pygame.sprite.collide_mask(player1, bola):  
+            # player 1 com  a bola, garantido que ele soh possa
+            # chutar para o gol do p_2
+            if player1.speed_x >= 0:
+                bola.speed_x = player1.speed_x * (random.uniform(1, 3))
+                bola.speed_y = (-1) * random.randint(12, 18) + player1.speed_y * (random.uniform(0.1, 0.7))
                 chute.play()
             else:
-                bola.speedX = player1.speedX * (random.uniform(1, 3)) * (-1)
-                bola.speedY = -player1.speedY * (random.uniform(2, 4))
+                bola.speed_x = player1.speed_x * (random.uniform(1, 3)) * (-1)
+                bola.speed_y = -player1.speed_y * (random.uniform(2, 4))
                 chute.play()
 
-        if pygame.sprite.collide_mask(player2, bola):  # player 2 com  a bola, garantido que ele soh possa
-            # chutar para o gol do p1
+        if pygame.sprite.collide_mask(player2, bola):  
+            # player 2 com  a bola, garantido que ele soh possa
+            # chutar para o gol do p_1
 
-            if player2.speedX <= 0:
-                bola.speedX = player2.speedX * (random.uniform(1, 3))
-                bola.speedY = (-1) * random.randint(12, 18) + player2.speedY * (random.uniform(0.1, 0.7))
+            if player2.speed_x <= 0:
+                bola.speed_x = player2.speed_x * (random.uniform(1, 3))
+                bola.speed_y = (-1) * random.randint(12, 18) + player2.speed_y * (random.uniform(0.1, 0.7))
                 chute.play()
 
             else:
-                bola.speedX = player2.speedX * (random.uniform(1, 3)) * (-1)
-                bola.speedY = -player2.speedY * (random.uniform(2, 4))
+                bola.speed_x = player2.speed_x * (random.uniform(1, 3)) * (-1)
+                bola.speed_y = -player2.speed_y * (random.uniform(2, 4))
                 chute.play()
 
 
@@ -357,28 +355,28 @@ def main():  # main routine
         if pygame.sprite.collide_rect(bola, gol_dir):
 
             if bola.rect.top >= gol_dir.rect.top:
-                p1.score += 1
+                p_1.score += 1
                 gol.play()
 
                 reset()
 
             elif bola.rect.bottom >= gol_dir.rect.top:
                 bola.rect.bottom = gol_esq.rect.top
-                bola.speedX = -bola.speedX
-                bola.speedY = -bola.speedY
+                bola.speed_x = -bola.speed_x
+                bola.speed_y = -bola.speed_y
 
         if pygame.sprite.collide_rect(bola, gol_esq):
 
             if bola.rect.top >= gol_esq.rect.top:
-                p2.score += 1
+                p_2.score += 1
                 gol.play()
 
                 reset()
 
             elif bola.rect.bottom >= gol_esq.rect.top:
                 bola.rect.bottom = gol_esq.rect.top
-                bola.speedX = -bola.speedX
-                bola.speedY = -bola.speedY
+                bola.speed_x = -bola.speed_x
+                bola.speed_y = -bola.speed_y
 
     while True:
         surf.fill(BLACK)
@@ -386,8 +384,8 @@ def main():  # main routine
         events = pygame.event.get()
 
         # inicia as variaveis para os placares
-        placarEsquerda = p1.score
-        placarDireita = p2.score
+        placar_esquerda = p_1.score
+        placar_direita = p_2.score
 
         # Editando as teclas do teclado para dar para jogar:
         for event in events:
@@ -402,9 +400,9 @@ def main():  # main routine
                 start = False
 
             # reincia o jogo caso queiram jogar denovo apos
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and (p1.score >= 7 or p2.score >= 7):
-                p1.score = 0
-                p2.score = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and (p_1.score >= 7 or p_2.score >= 7):
+                p_1.score = 0
+                p_2.score = 0
 
                 reset()
 
@@ -419,10 +417,10 @@ def main():  # main routine
 
         # Adicionando a tela inicial e fazendo o jogo rodar:
         if start:
-            surf.blit(p1.image, p1.rect)
-            surf.blit(p2.image, p2.rect)
+            surf.blit(p_1.image, p_1.rect)
+            surf.blit(p_2.image, p_2.rect)
             surf.blit(jabulani.image, jabulani.rect)
-            surf.blit(startScreen.image, [DISPLAY_X / 10, DISPLAY_X / 10])
+            surf.blit(start_screen.image, [display_x / 10, display_x / 10])
 
         # sai da tela inicial e comeca o jogo
         else:
@@ -433,7 +431,7 @@ def main():  # main routine
                 calcula_colisao_chao(sprite)
 
                 # colisao player com bola
-                calcula_colisao_p_bola(p1, p2, jabulani)
+                calcula_colisao_p_bola(p_1, p_2, jabulani)
 
                 # colisões com o gol, toca o som, aumenta o placar, e reseta todos os sprites para a posicao inicial,
                 # com, velocidade X e Y = 0
@@ -441,64 +439,64 @@ def main():  # main routine
                 calcula_colisao_gol(golDir, golEsq, jabulani)
 
                 # gravidade, e atrito na bola
-                jabulani.speedY += GRAVITY / 20
-                p1.speedY += GRAVITY / 30
-                p2.speedY += GRAVITY / 30
-                jabulani.speedX /= ATRITO
+                jabulani.speed_y += GRAVITY / 20
+                p_1.speed_y += GRAVITY / 30
+                p_2.speed_y += GRAVITY / 30
+                jabulani.speed_x /= ATRITO
 
                 # para garantir que os sprites nao fiquem patinando pelo campo
-                if 0.1 >= jabulani.speedX >= -0.5:
-                    jabulani.speedX = 0
+                if 0.1 >= jabulani.speed_x >= -0.5:
+                    jabulani.speed_x = 0
 
-                p1.speedX /= ATRITO_P
-                if 0.1 >= p1.speedX >= -0.5:
-                    p1.speedX = 0
+                p_1.speed_x /= ATRITO_P
+                if 0.1 >= p_1.speed_x >= -0.5:
+                    p_1.speed_x = 0
 
-                p2.speedX /= ATRITO_P
-                if 0.1 >= p2.speedX >= -0.5:
-                    p2.speedX = 0
+                p_2.speed_x /= ATRITO_P
+                if 0.1 >= p_2.speed_x >= -0.5:
+                    p_2.speed_x = 0
 
             sprites.update()
 
             # Adicionando as imagens do jogo
-            surf.blit(backGround.image, [0, 0])  # imagem de fundo
-            surf.blit(p1.image, p1.rect)  # player 1
-            surf.blit(p2.image, p2.rect)  # player 2
+            surf.blit(back_ground.image, [0, 0])  # imagem de fundo
+            surf.blit(p_1.image, p_1.rect)  # player 1
+            surf.blit(p_2.image, p_2.rect)  # player 2
             surf.blit(jabulani.image, jabulani.rect)  # bola
             surf.blit(cancha.image, [0, 672])  # campo
             surf.blit(golEsq.image, [0, 320])  # gol da esquerda
             surf.blit(golDir.image, [1177, 320])  # gol da direita
 
             # Adicionando os placares:
-            textoEsquerda = fontScore.render("Ribamar: {0}".format(placarEsquerda), True, YELLOW)
-            textoDireita = fontScore.render("Messi Careca: {0}".format(placarDireita), True, YELLOW)
-            surf.blit(textoEsquerda, (10, 0))
-            surf.blit(textoDireita, (1045, 0))
+            texto_esquerda = font_score.render("Ribamar: {0}".format(placar_esquerda), True, YELLOW)
+            texto_direita = font_score.render("Messi Careca: {0}".format(placar_direita), True, YELLOW)
+            surf.blit(texto_esquerda, (10, 0))
+            surf.blit(texto_direita, (1045, 0))
 
             # Adicionando a tela final do jogo:
-            if p1.score >= 7:
+            if p_1.score >= 7:
                 surf.fill(BLACK)
-                surf.blit(endScreen.image, [DISPLAY_X / 5, DISPLAY_X / 5])
-                textoVencedor1 = fontInstructions.render("Jogador 1 venceu!", True, WHITE)
-                textoInstrucoes1 = fontInstructions.render("Pressione 'Enter' para jogar novamente", True, WHITE)
-                textoInstrucoes2 = fontInstructions.render("Pressione 'ESC' para sair", True, WHITE)
-                surf.blit(p1.image, (DISPLAY_X * 0.47, DISPLAY_X / 3))
-                surf.blit(textoVencedor1, [DISPLAY_X * 4 / 9, DISPLAY_X / 3])
-                surf.blit(textoInstrucoes1, [DISPLAY_X * 4 / 11, DISPLAY_X * 3 / 5])
-                surf.blit(textoInstrucoes2,
-                          [(DISPLAY_X / 2) - (textoInstrucoes2.get_rect().width / 2), DISPLAY_X * 11 / 17])
+                surf.blit(end_screen.image, [display_x / 5, display_x / 5])
+                texto_vencedor_1 = font_instructions.render("Jogador 1 venceu!", True, WHITE)
+                texto_instrucoes_1 = font_instructions.render("Pressione 'Enter' para jogar novamente", True, WHITE)
+                texto_instrucoes_2 = font_instructions.render("Pressione 'ESC' para sair", True, WHITE)
+                surf.blit(p_1.image, (display_x * 0.47, display_x / 3))
+                surf.blit(texto_vencedor_1, [display_x * 4 / 9, display_x / 3])
+                surf.blit(texto_instrucoes_1, [display_x * 4 / 11, display_x * 3 / 5])
+                surf.blit(texto_instrucoes_2,
+                          [(display_x / 2) - (texto_instrucoes_2.get_rect().width / 2), display_x * 11 / 17])
 
-            if p2.score >= 7:
+            if p_2.score >= 7:
                 surf.fill(BLACK)
-                surf.blit(endScreen.image, [DISPLAY_X / 5, DISPLAY_X / 5])
-                textoVencedor1 = fontInstructions.render("Jogador 2 venceu!", True, WHITE)
-                textoInstrucoes1 = fontInstructions.render("Pressione 'Enter' para jogar novamente", True, WHITE)
-                textoInstrucoes2 = fontInstructions.render("Pressione 'ESC' para sair", True, WHITE)
-                surf.blit(p2.image, (DISPLAY_X * 0.47, DISPLAY_X / 3))
-                surf.blit(textoVencedor1, [DISPLAY_X * 4 / 9, DISPLAY_X / 3])
-                surf.blit(textoInstrucoes1, [DISPLAY_X * 4 / 11, DISPLAY_X * 3 / 5])
-                surf.blit(textoInstrucoes2,
-                          [(DISPLAY_X / 2) - (textoInstrucoes2.get_rect().width / 2), DISPLAY_X * 11 / 17])
+                surf.blit(end_screen.image, [display_x / 5, display_x / 5])
+                texto_vencedor_1 = font_instructions.render("Jogador 2 venceu!", True, WHITE)
+                texto_instrucoes_1 = font_instructions.render("Pressione 'Enter' para jogar novamente", True, WHITE)
+                texto_instrucoes_2 = font_instructions.render("Pressione 'ESC' para sair", True, WHITE)
+                surf.blit(p_2.image, (display_x * 0.47, display_x / 3))
+                surf.blit(texto_vencedor_1, [display_x * 4 / 9, display_x / 3])
+                surf.blit(texto_instrucoes_1, [display_x * 4 / 11, display_x * 3 / 5])
+                surf.blit(texto_instrucoes_2,
+                          [(display_x / 2) - (texto_instrucoes_2.get_rect().width / 2), display_x * 11 / 17])
 
         pygame.display.flip()  # faz o update da imagine, usando troca de memory bugger
 
