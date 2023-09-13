@@ -15,6 +15,14 @@ WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 
+def resource_path(relative_path):
+    try:
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def calcula_colisao_chao(sprite):
     if sprite.rect.bottom > 672:  # com o chao
@@ -27,7 +35,7 @@ def calcula_colisao_chao(sprite):
 class Background(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'fundo.png')
+        imagem = resource_path('Imagem/fundo.png')
         print(imagem)
         try:  # Importanto a imagem
             back_ground = pygame.image.load(imagem)  # da tela de fundo
@@ -43,7 +51,7 @@ class Background(pygame.sprite.Sprite):
 class Startscreen(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'startscreen.png')
+        imagem = resource_path('Imagem/startscreen.png')
         print(imagem)
         try:  # Importanto a imagem
             start_screen = pygame.image.load(imagem)  # da Tela Inicial
@@ -59,7 +67,7 @@ class Startscreen(pygame.sprite.Sprite):
 class Jogador1(pygame.sprite.Sprite):
     def __init__(self,column, row, block):
 
-        imagem = os.path.join('Imagem', 'ribamar.png')
+        imagem = resource_path('Imagem/ribamar.png')
         print(imagem)
         try:  # Importanto a imagem
             player1Img = pygame.image.load(imagem)  # do jogador 1
@@ -87,8 +95,7 @@ class Jogador1(pygame.sprite.Sprite):
 class Jogador2(pygame.sprite.Sprite):
     def __init__(self, colum, row, block):
 
-        imagem = os.path.join('Imagem', 'mece.png')
-
+        imagem = resource_path('Imagem/mece.png')
         print(imagem)
         try:  # Importanto a imagem
             player2Img = pygame.image.load(imagem)  # do jogador 2
@@ -116,7 +123,7 @@ class Jogador2(pygame.sprite.Sprite):
 class Bola(pygame.sprite.Sprite):
     def __init__(self, colum, row, block):
 
-        imagem = os.path.join('Imagem', 'jabulani.png')
+        imagem = resource_path('Imagem/jabulani.png')
         print(imagem)
         try:  # Importanto a imagem
             ball = pygame.image.load(imagem)  # da bola
@@ -143,7 +150,7 @@ class Bola(pygame.sprite.Sprite):
 class Campo(pygame.sprite.Sprite):
     def __init__(self):
 
-        imgfield = os.path.join('Imagem', 'field.png')
+        imgfield = resource_path('Imagem/field.png')
         print(imgfield)
         try:  # Importando a imagem
             pitch = pygame.image.load(imgfield)  # do campo
@@ -161,8 +168,7 @@ class Campo(pygame.sprite.Sprite):
 class GolEsquerdo(pygame.sprite.Sprite):
     def __init__(self):
 
-        imggol1 = os.path.join('Imagem', 'gol-esq.png')
-
+        imggol1 = resource_path('Imagem/gol-esq.png')
         print(imggol1)
         try:  # Importando a imagem
             g_esq = pygame.image.load(imggol1)  # do gol esquerdo
@@ -182,8 +188,7 @@ class GolEsquerdo(pygame.sprite.Sprite):
 class GolDireito(pygame.sprite.Sprite):
     def __init__(self):
 
-        imggol2 = os.path.join('Imagem', 'gol-dir.png')
-
+        imggol2 = resource_path('Imagem/gol-dir.png')
         print(imggol2)
         try:  # Impotando a imagem
             g_dir = pygame.image.load(imggol2)  # do gol direito
@@ -203,7 +208,7 @@ class GolDireito(pygame.sprite.Sprite):
 class End_screen(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'endscreen.png')
+        imagem = resource_path('Imagem/endscreen.png')
         print(imagem)
         try:  # Importanto a imagem
             End_screen = pygame.image.load(imagem)  # da end_screen
@@ -258,17 +263,19 @@ def main():  # main routine
     sprites.add(p_1, p_2, jabulani)  # adiciona as sprites ao grupo de sprites
 
     # inicializa a musica de fundo
-    torcida = os.path.join('Som', 'Torcida.ogg')  # Som ambiente de torcida
+    torcida = resource_path('Som/Torcida.ogg')# Som ambiente de torcida
+    # torcida = os.path.join('Som', 'Torcida.ogg')  
     pygame.mixer.music.load(torcida)  # Carrega som
     pygame.mixer.music.set_volume(0.2)  # Volume
     pygame.mixer.music.play(-1)  # Toca som
 
     # inicia os outros sons
-    sompulo = os.path.join('Som', 'Pular.ogg')  # som do pulo
+
+    sompulo= resource_path('Som/Pular.ogg') # som do pulo
     pulo = pygame.mixer.Sound(sompulo)  # carrega som
-    somchute = os.path.join('Som', 'Chute.ogg')  # som do chute
+    somchute = resource_path('Som/Chute.ogg')# som do chute
     chute = pygame.mixer.Sound(somchute)  # carrega som
-    somgol = os.path.join('Som', 'Gol.ogg')  # som do gol
+    somgol = resource_path('Som/Gol.ogg')# som do gol
     gol = pygame.mixer.Sound(somgol)  # carrega som
     gol.set_volume(0.7)
 
