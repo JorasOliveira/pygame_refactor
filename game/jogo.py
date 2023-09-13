@@ -203,7 +203,7 @@ class GolDireito(pygame.sprite.Sprite):
 class End_screen(pygame.sprite.Sprite):
     def __init__(self):
 
-        imagem = os.path.join('Imagem', 'end_screen.png')
+        imagem = os.path.join('Imagem', 'endscreen.png')
         print(imagem)
         try:  # Importanto a imagem
             End_screen = pygame.image.load(imagem)  # da end_screen
